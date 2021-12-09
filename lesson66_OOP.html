@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <style>
+      p {
+        font-weight: bold;
+      }
+      .topic {
+        text-decoration: underline;
+        margin: 10px;
+      }
+      .task {
+        margin: 20px 10px;
+      }
+      .container {
+        padding-bottom: 15px;
+        border-bottom: 1px black solid;
+      }
+    </style>
+
+    <p>Задание 1</p>
+
+    <div class="topic">Задачи на наследование классов в JavaScript</div>
+    <div class="task">
+      Реализуйте класс Student (Студент), который будет наследовать от класса
+      User, подобно тому, как это сделано в теоретической части урока. Этот
+      класс должен иметь следующие свойства: name (имя, наследуется от User),
+      surname (фамилия, наследуется от User), year (год поступления в вуз).
+      Класс должен иметь метод getFullName() (наследуется от User), с помощью
+      которого можно вывести одновременно имя и фамилию студента. Также класс
+      должен иметь метод getCourse(), который будет выводить текущий курс
+      студента (от 1 до 5). Курс вычисляется так: нужно от текущего года отнять
+      год поступления в вуз. Текущий год получите самостоятельно.
+    </div>
+
+    <input
+      type="text"
+      class="inp userName"
+      placeholder=" Введите имя студента"
+    />
+    <input
+      type="text"
+      class="inp userSurname"
+      placeholder=" Введите фамилию студента"
+    />
+    <input
+      type="text"
+      class="inp userYear"
+      placeholder=" Введите год поступления студента"
+    />
+    <input type="button" value="Внести данные" class="button" />
+
+    <div class="container divT1"></div>
+
+    <script>
+      // http://old.code.mu/tasks/javascript/oop/nasledovanie-klassov-v-javascript.html
+
+      // задание 1
+
+      const d = document
+      const divT1 = d.querySelector('.divT1')
+      const userName = d.querySelector('.userName')
+      const userSurname = d.querySelector('.userSurname')
+      const userYear = d.querySelector('.userYear')
+      const button = d.querySelector('.button')
+
+      function outputOfResult(parent, receivedValue, initialValue = 'none') {
+        if (initialValue !== 'none') {
+          const sourceString = `Исходная строка: ${initialValue}`
+          const newDiv = d.createElement('div')
+          parent.appendChild(newDiv)
+          newDiv.innerHTML = sourceString
+        }
+
+        const modifiedString = `Внесённая информация: ${receivedValue}`
+        const newDiv2 = d.createElement('div')
+        parent.appendChild(newDiv2)
+        newDiv2.innerHTML = modifiedString
+      }
+
+      class User {
+        constructor(name, surname) {
+          this._name = name
+          this._surname = surname
+        }
+        getFullName() {
+          return this._name + ', ' + this._surname
+        }
+      }
+
+      class Student extends User {
+        constructor(name, surname, year) {
+          super(name, surname)
+          this._year = year
+        }
+
+        getCourse() {
+          let date = new Date()
+          return date.getFullYear() - this._year
+        }
+      }
+
+      button.addEventListener('click', showInformation)
+
+      function showInformation() {
+        let str = ''
+        let vasja = new Student(
+          userName.value,
+          userSurname.value,
+          userYear.value
+        )
+        if (vasja.getCourse() > 0 && vasja.getCourse() < 7) {
+          str =
+            vasja.getFullName() +
+            ', обучается на ' +
+            vasja.getCourse() +
+            ' курсе'
+        }
+        if (vasja.getCourse() <= 0)
+          str = vasja.getFullName() + ', ещё не поступил в ВУЗ'
+        if (vasja.getCourse() >= 7)
+          str =
+            vasja.getFullName() +
+            `, окончил обучение ${vasja.getCourse() - 6} лет назад`
+
+        outputOfResult(divT1, str)
+      }
+    </script>
+  </body>
+</html>
